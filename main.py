@@ -72,6 +72,40 @@ def get_valid_number(prompt, min_val, max_val):
             print(f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요.")
 
 
+def play_quiz(quizzes):
+    """저장된 퀴즈를 순서대로 출제하고 채점 결과를 보여주는 함수"""
+    # 1. 만약 등록된 퀴즈가 하나도 없을 때의 예외 처리
+    if not quizzes:
+        print("\n⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요!")
+        return
+
+    total_count = len(quizzes)
+    correct_count = 0
+
+    print(f"\n📝 퀴즈를 시작합니다! (총 {total_count}문제)")
+
+    # 2. for 반복문으로 문제를 1번부터 끝까지 순서대로 출제
+    for i in range(total_count):
+        quiz = quizzes[i]
+        quiz.display(i + 1)
+
+        # 1~4 사이의 안전한 정답 번호 입력받기
+        user_answer = get_valid_number("정답 입력 (1-4): ", 1, 4)
+
+        # 정답 확인 후 맞았으면 맞힌 개수(correct_count)에 1 더하기
+        if quiz.check_answer(user_answer):
+            print("✅ 정답입니다!")
+            correct_count += 1
+        else:
+            print(f"❌ 오답입니다! (정답: {quiz.answer}번)")
+
+    # 3. 모든 문제를 다 풀면 100점 만점 기준으로 점수 계산 및 출력
+    score = int((correct_count / total_count) * 100)
+    print("\n========================================")
+    print(f"🏆 결과: {total_count}문제 중 {correct_count}문제 정답! ({score}점)")
+    print("========================================")
+
+
 def display_menu():
     """메인 메뉴 화면을 출력하는 함수"""
     print("\n========================================")
@@ -87,7 +121,6 @@ def display_menu():
 
 def main():
     """게임의 전체 흐름을 조절하는 메인 함수"""
-    # 기본 퀴즈 5문제를 불러와서 quizzes 상자(변수)에 담아둡니다.
     quizzes = get_default_quizzes()
 
     while True:
@@ -95,7 +128,7 @@ def main():
         choice = get_valid_number("선택: ", 1, 5)
 
         if choice == 1:
-            print(f"\n📝 현재 총 {len(quizzes)}개의 기본 퀴즈가 준비되어 있습니다! (풀기 기능은 6단계에서 연결)")
+            play_quiz(quizzes)
         elif choice == 2:
             print("\n📌 [퀴즈 추가] 기능은 곧 추가될 예정입니다!")
         elif choice == 3:
@@ -112,4 +145,3 @@ if __name__ == "__main__":
         main()
     except (KeyboardInterrupt, EOFError):
         print("\n\n👋 프로그램을 안전하게 종료합니다.")
-        
