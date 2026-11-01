@@ -1,36 +1,62 @@
 def get_valid_number(prompt, min_val, max_val):
-	"""사용자로부터 min_val ~ max_val 사이의 안전한 숫자를 입력받는 함수"""
-	while True:
-		# 1. 입력받고 앞뒤 공백 제거 (.strip())
-		user_input = input(prompt).strip()
+  """사용자로부터 min_val ~ max_val 사이의 안전한 숫자를 입력받는 함수"""
+  while True:
+    user_input = input(prompt).strip()
 
-		# 2. 빈 입력(그냥 Enter) 처리
-		if not user_input:
-			print("⚠️ 입력이 비어 있습니다. 숫자를 입력해 주세요.")
-			continue
+    if not user_input:
+      print("⚠️ 입력이 비어 있습니다. 숫자를 입력해 주세요.")
+      continue
 
-		# 3. 숫자로 변환 시도 (abc 등 글자 입력 시 에러 방지 에어백)
-		try:
-			number = int(user_input)
-		except ValueError:
-			print(
-					f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요."
-			)
-			continue
+    try:
+      number = int(user_input)
+    except ValueError:
+      print(
+          f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요."
+      )
+      continue
 
-		# 4. 허용 범위(min_val ~ max_val) 안의 숫자인지 확인
-		if min_val <= number <= max_val:
-			return number
-		else:
-			print(
-					f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요."
-			)
+    if min_val <= number <= max_val:
+      return number
+    else:
+      print(
+          f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요."
+      )
 
 
-# 프로그램 실행 시작점 (3단계에서 메뉴 화면으로 바뀔 예정입니다)
+def display_menu():
+  """메인 메뉴 화면을 출력하는 함수"""
+  print("\n========================================")
+  print("        🎯 나만의 퀴즈 게임 🎯")
+  print("========================================")
+  print("1. 퀴즈 풀기")
+  print("2. 퀴즈 추가")
+  print("3. 퀴즈 목록")
+  print("4. 점수 확인")
+  print("5. 종료")
+  print("========================================")
+
+
+def main():
+  """게임의 전체 흐름을 조절하는 메인 함수"""
+  while True:
+    display_menu()
+    choice = get_valid_number("선택: ", 1, 5)
+
+    if choice == 1:
+      print("\n📝 [퀴즈 풀기] 기능은 곧 추가될 예정입니다!")
+    elif choice == 2:
+      print("\n📌 [퀴즈 추가] 기능은 곧 추가될 예정입니다!")
+    elif choice == 3:
+      print("\n📋 [퀴즈 목록] 기능은 곧 추가될 예정입니다!")
+    elif choice == 4:
+      print("\n🏆 [점수 확인] 기능은 곧 추가될 예정입니다!")
+    elif choice == 5:
+      print("\n👋 퀴즈 게임을 종료합니다. 다음에 또 만나요!")
+      break
+
+
 if __name__ == "__main__":
-	try:
-		choice = get_valid_number("선택 (1-5): ", 1, 5)
-		print(f"✅ 정상 입력 완료! 선택한 번호: {choice}")
-	except (KeyboardInterrupt, EOFError):
-		print("\n\n👋 프로그램을 안전하게 종료합니다.")
+  try:
+    main()
+  except (KeyboardInterrupt, EOFError):
+    print("\n\n👋 프로그램을 안전하게 종료합니다.")
