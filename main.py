@@ -11,14 +11,44 @@ class Quiz:
         print("\n----------------------------------------")
         print(f"[문제 {quiz_num}]")
         print(f"{self.question}\n")
-        # 컴퓨터는 숫자를 0부터 세기 때문에(0, 1, 2, 3), 화면에는 +1을 해서 1~4번으로 보여줍니다.
         for i in range(4):
             print(f"{i + 1}. {self.choices[i]}")
         print()
 
     def check_answer(self, user_answer):
-        """사용자가 입력한 번호가 정답과 같은지 확인하는 메서드 (맞으면 True, 틀리면 False 반환)"""
+        """사용자가 입력한 번호가 정답과 같은지 확인하는 메서드"""
         return self.answer == user_answer
+
+
+def get_default_quizzes():
+    """기본으로 제공되는 회계/경제 상식 퀴즈 5개(Quiz 인스턴스 리스트)를 반환하는 함수"""
+    return [
+        Quiz(
+            "재무상태표의 기본이 되는 '회계 등식'으로 올바른 것은?",
+            ["자산 = 부채 - 자본", "자산 = 부채 + 자본", "자산 = 수익 - 비용", "자본 = 자산 + 부채"],
+            2
+        ),
+        Quiz(
+            "일정 기간 동안 기업의 경영성과(수익과 비용)를 나타내는 재무제표는?",
+            ["재무상태표", "자본변동표", "포괄손익계산서", "현금흐름표"],
+            3
+        ),
+        Quiz(
+            "생산량이 증감하더라도 총원가가 일정하게 유지되는 원가(예: 공장 임차료)는?",
+            ["변동원가", "기회원가", "매몰원가", "고정원가"],
+            4
+        ),
+        Quiz(
+            "현재 대한민국의 일반 부가가치세(VAT) 세율은 몇 %인가?",
+            ["5%", "10%", "15%", "20%"],
+            2
+        ),
+        Quiz(
+            "재무제표가 회계기준에 따라 적정하게 작성되었을 때 외부감사인이 표명하는 최상의 감사의견은?",
+            ["적정의견", "한정의견", "부적정의견", "의견거절"],
+            1
+        )
+    ]
 
 
 def get_valid_number(prompt, min_val, max_val):
@@ -57,12 +87,15 @@ def display_menu():
 
 def main():
     """게임의 전체 흐름을 조절하는 메인 함수"""
+    # 기본 퀴즈 5문제를 불러와서 quizzes 상자(변수)에 담아둡니다.
+    quizzes = get_default_quizzes()
+
     while True:
         display_menu()
         choice = get_valid_number("선택: ", 1, 5)
 
         if choice == 1:
-            print("\n📝 [퀴즈 풀기] 기능은 곧 추가될 예정입니다!")
+            print(f"\n📝 현재 총 {len(quizzes)}개의 기본 퀴즈가 준비되어 있습니다! (풀기 기능은 6단계에서 연결)")
         elif choice == 2:
             print("\n📌 [퀴즈 추가] 기능은 곧 추가될 예정입니다!")
         elif choice == 3:
@@ -79,3 +112,4 @@ if __name__ == "__main__":
         main()
     except (KeyboardInterrupt, EOFError):
         print("\n\n👋 프로그램을 안전하게 종료합니다.")
+        
