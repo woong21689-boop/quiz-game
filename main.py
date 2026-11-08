@@ -72,9 +72,17 @@ def get_valid_number(prompt, min_val, max_val):
             print(f"⚠️ 잘못된 입력입니다. {min_val}-{max_val} 사이의 숫자를 입력하세요.")
 
 
+def get_non_empty_text(prompt):
+    """빈칸(그냥 Enter)이 아닌 글자를 안전하게 입력받는 함수"""
+    while True:
+        text = input(prompt).strip()
+        if text:
+            return text
+        print("⚠️ 내용이 비어 있습니다. 다시 입력해 주세요.")
+
+
 def play_quiz(quizzes):
     """저장된 퀴즈를 순서대로 출제하고 채점 결과를 보여주는 함수"""
-    # 1. 만약 등록된 퀴즈가 하나도 없을 때의 예외 처리
     if not quizzes:
         print("\n⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요!")
         return
@@ -84,26 +92,40 @@ def play_quiz(quizzes):
 
     print(f"\n📝 퀴즈를 시작합니다! (총 {total_count}문제)")
 
-    # 2. for 반복문으로 문제를 1번부터 끝까지 순서대로 출제
     for i in range(total_count):
         quiz = quizzes[i]
         quiz.display(i + 1)
 
-        # 1~4 사이의 안전한 정답 번호 입력받기
         user_answer = get_valid_number("정답 입력 (1-4): ", 1, 4)
 
-        # 정답 확인 후 맞았으면 맞힌 개수(correct_count)에 1 더하기
         if quiz.check_answer(user_answer):
             print("✅ 정답입니다!")
             correct_count += 1
         else:
             print(f"❌ 오답입니다! (정답: {quiz.answer}번)")
 
-    # 3. 모든 문제를 다 풀면 100점 만점 기준으로 점수 계산 및 출력
     score = int((correct_count / total_count) * 100)
     print("\n========================================")
     print(f"🏆 결과: {total_count}문제 중 {correct_count}문제 정답! ({score}점)")
     print("========================================")
+
+
+def add_quiz(quizzes):
+    """사용자로부터 문제, 보기 4개, 정답을 입력받아 새 퀴즈를 추가하는 함수"""
+    print("\n📌 새로운 퀴즈를 추가합니다.")
+
+    question = get_non_empty_text("문제를 입력하세요: ")
+
+    choices = []
+    for i in range(1, 5):
+        choice_text = get_non_empty_text(f"선택지 {i}: ")
+        choices.append(choice_text)
+
+    answer = get_valid_number("정답 번호 (1-4): ", 1, 4)
+
+    new_quiz = Quiz(question, choices, answer)
+    quizzes.append(new_quiz)
+    print("\n✅ 퀴즈가 추가되었습니다!")
 
 
 def display_menu():
@@ -130,7 +152,7 @@ def main():
         if choice == 1:
             play_quiz(quizzes)
         elif choice == 2:
-            print("\n📌 [퀴즈 추가] 기능은 곧 추가될 예정입니다!")
+            add_quiz(quizzes)
         elif choice == 3:
             print("\n📋 [퀴즈 목록] 기능은 곧 추가될 예정입니다!")
         elif choice == 4:
