@@ -128,6 +128,19 @@ def add_quiz(quizzes):
     print("\n✅ 퀴즈가 추가되었습니다!")
 
 
+def show_quiz_list(quizzes):
+    """저장된 모든 퀴즈의 목록을 출력하는 함수"""
+    if not quizzes:
+        print("\n⚠️ 현재 등록된 퀴즈가 없습니다.")
+        return
+
+    print(f"\n📋 등록된 퀴즈 목록 (총 {len(quizzes)}개)\n")
+    print("----------------------------------------")
+    for i in range(len(quizzes)):
+        print(f"[{i + 1}] {quizzes[i].question}")
+    print("----------------------------------------")
+
+
 def display_menu():
     """메인 메뉴 화면을 출력하는 함수"""
     print("\n========================================")
@@ -154,7 +167,7 @@ def main():
         elif choice == 2:
             add_quiz(quizzes)
         elif choice == 3:
-            print("\n📋 [퀴즈 목록] 기능은 곧 추가될 예정입니다!")
+            show_quiz_list(quizzes)
         elif choice == 4:
             print("\n🏆 [점수 확인] 기능은 곧 추가될 예정입니다!")
         elif choice == 5:
