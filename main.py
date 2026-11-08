@@ -2,9 +2,9 @@ class Quiz:
     """개별 퀴즈 하나를 표현하는 클래스 (붕어빵 틀)"""
 
     def __init__(self, question, choices, answer):
-        self.question = question  # 문제 내용 (글자, str)
-        self.choices = choices    # 선택지 4개 묶음 (리스트, list)
-        self.answer = answer      # 정답 번호 1~4 (숫자, int)
+        self.question = question
+        self.choices = choices
+        self.answer = answer
 
     def display(self, quiz_num):
         """퀴즈 문제와 선택지 4개를 화면에 출력하는 메서드"""
@@ -21,7 +21,7 @@ class Quiz:
 
 
 def get_default_quizzes():
-    """기본으로 제공되는 회계/경제 상식 퀴즈 5개(Quiz 인스턴스 리스트)를 반환하는 함수"""
+    """기본으로 제공되는 회계/경제 상식 퀴즈 5개를 반환하는 함수"""
     return [
         Quiz(
             "재무상태표의 기본이 되는 '회계 등식'으로 올바른 것은?",
@@ -81,11 +81,11 @@ def get_non_empty_text(prompt):
         print("⚠️ 내용이 비어 있습니다. 다시 입력해 주세요.")
 
 
-def play_quiz(quizzes):
-    """저장된 퀴즈를 순서대로 출제하고 채점 결과를 보여주는 함수"""
+def play_quiz(quizzes, best_score):
+    """저장된 퀴즈를 출제하고 최고 점수를 갱신하여 반환하는 함수"""
     if not quizzes:
         print("\n⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요!")
-        return
+        return best_score
 
     total_count = len(quizzes)
     correct_count = 0
@@ -107,7 +107,13 @@ def play_quiz(quizzes):
     score = int((correct_count / total_count) * 100)
     print("\n========================================")
     print(f"🏆 결과: {total_count}문제 중 {correct_count}문제 정답! ({score}점)")
+
+    if best_score is None or score > best_score:
+        best_score = score
+        print("🎉 새로운 최고 점수입니다!")
+
     print("========================================")
+    return best_score
 
 
 def add_quiz(quizzes):
@@ -141,6 +147,14 @@ def show_quiz_list(quizzes):
     print("----------------------------------------")
 
 
+def show_best_score(best_score):
+    """현재까지의 최고 점수를 출력하는 함수"""
+    if best_score is None:
+        print("\n⚠️ 아직 퀴즈를 풀지 않아 기록된 최고 점수가 없습니다.")
+    else:
+        print(f"\n🏆 최고 점수: {best_score}점")
+
+
 def display_menu():
     """메인 메뉴 화면을 출력하는 함수"""
     print("\n========================================")
@@ -157,19 +171,20 @@ def display_menu():
 def main():
     """게임의 전체 흐름을 조절하는 메인 함수"""
     quizzes = get_default_quizzes()
+    best_score = None
 
     while True:
         display_menu()
         choice = get_valid_number("선택: ", 1, 5)
 
         if choice == 1:
-            play_quiz(quizzes)
+            best_score = play_quiz(quizzes, best_score)
         elif choice == 2:
             add_quiz(quizzes)
         elif choice == 3:
             show_quiz_list(quizzes)
         elif choice == 4:
-            print("\n🏆 [점수 확인] 기능은 곧 추가될 예정입니다!")
+            show_best_score(best_score)
         elif choice == 5:
             print("\n👋 퀴즈 게임을 종료합니다. 다음에 또 만나요!")
             break
